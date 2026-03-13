@@ -1,16 +1,63 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
+import searchData from '../test-data/search.json';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://opensource-demo.orangehrmlive.com/');
+const BASE_URL = 'https://opensource-demo.orangehrmlive.com';
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/OrangeHRM/);
+// LOGIN
+async function login(page: Page) {
+  await page.goto(BASE_URL);
+  
+  // Dùng locator chuẩn HTML attribute để chống lỗi đa ngôn ngữ (i18n)
+  await page.locator('input[name="username"]').fill('Admin');
+  await page.locator('input[name="password"]').fill('admin123');
+  await page.locator('button[type="submit"]').click();
+  
+  await page.waitForURL('**/dashboard/**');
+}
 
-  await page.fill('input[name="username"]', 'Admin');
-  await page.fill('input[name="password"]', 'admin123');
-  await page.click('button[type="submit"]');
+// VALID SEARCH
+for (const item of searchData.validSearch) {
+  test(`Search thành công - ${item.description}`, async ({ page }) => {
+    await login(page);
+    
+    // Điều hướng theo Codegen
+    await page.getByRole('link', { name: 'PIM' }).click();
 
-  await expect(page).toHaveURL(/dashboard/);
+    // Khởi tạo đối tượng ô search từ Codegen
+    const searchInput = page.getByRole('textbox', { name: 'Type for hints...' }).first();
+    await searchInput.waitFor({ state: 'visible' });
+    
+    // Áp dụng kỹ thuật bôi đen/clear data trước khi nhập
+    await searchInput.click();
+    await searchInput.press('ControlOrMeta+a');
+    await searchInput.fill(item.employeeName);
 
-await page.click('a[href*="recruitment"]');
-});
+    await page.getByRole('button', { name: 'Search' }).click();
+
+    // Dùng Regex /Records? Found/ để khớp cả 2 trường hợp: "Record Found" (số ít) và "Records Found" (số nhiều)
+    const recordFoundText = page.getByText(/Records? Found/i);
+    await expect(recordFoundText).toBeVisible({ timeout: 10000 });
+  });
+}
+
+// INVALID SEARCH
+for (const item of searchData.invalidSearch) {
+  test(`Search không có kết quả - ${item.description}`, async ({ page }) => {
+    await login(page);
+    
+    await page.getByRole('link', { name: 'PIM' }).click();
+
+    const searchInput = page.getByRole('textbox', { name: 'Type for hints...' }).first();
+    await searchInput.waitFor({ state: 'visible' });
+    
+    await searchInput.click();
+    await searchInput.press('ControlOrMeta+a');
+    await searchInput.fill(item.employeeName);
+
+    await page.getByRole('button', { name: 'Search' }).click();
+
+    // Dùng chính xác locator Toast Message từ Codegen
+    const toastMessage = page.locator('#oxd-toaster_1').getByText(item.expectedMessage);
+    await expect(toastMessage).toBeVisible({ timeout: 10000 });
+  });
+}

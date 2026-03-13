@@ -1,0 +1,41 @@
+{
+  "validSearch": [
+    {
+      "employeeName": "Amelia",
+      "description": "Tim theo ten day du",
+      "minExpectedRows": 1
+    },
+    {
+      "employeeName": "a",
+      "description": "Tim theo ky tu dau",
+      "minExpectedRows": 1
+    },
+    {
+      "employeeName": "ad",
+      "description": "Tim theo 2 ky tu",
+      "minExpectedRows": 1
+    }
+  ],
+  "invalidSearch": [
+    {
+      "employeeName": "XXXXXXXXXXX",
+      "description": "Ten khong ton tai",
+      "expectedMessage": "No Records Found"
+    },
+    {
+      "employeeName": "123456789",
+      "description": "Nhap so thay ten",
+      "expectedMessage": "No Records Found"
+    },
+    {
+      "employeeName": "!@#$%^&*()",
+      "description": "Nhap ky tu dac biet",
+      "expectedMessage": "No Records Found"
+    },
+    {
+      "employeeName": "<script>alert(1)</script>",
+      "description": "XSS injection",
+      "expectedMessage": "No Records Found"
+    }
+  ]
+}
