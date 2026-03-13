@@ -1,0 +1,106 @@
+[
+  {
+    "name": "Valid login with correct admin account",
+    "input": {
+      "username": "Admin",
+      "password": "admin123"
+    },
+    "expect": {
+      "result": "success",
+      "redirectUrl": "/web/index.php/dashboard/index",
+      "visibleSelector": ".oxd-topbar-header-breadcrumb"
+    }
+  },
+  {
+    "name": "Login fails with wrong password",
+    "input": {
+      "username": "Admin",
+      "password": "wrongpassword"
+    },
+    "expect": {
+      "result": "error",
+      "message": "Invalid credentials"
+    }
+  },
+  {
+    "name": "Login fails with non-existing username",
+    "input": {
+      "username": "invaliduser",
+      "password": "admin123"
+    },
+    "expect": {
+      "result": "error",
+      "message": "Invalid credentials"
+    }
+  },
+  {
+    "name": "Login fails with both username and password incorrect",
+    "input": {
+      "username": "fakeuser",
+      "password": "fakepassword"
+    },
+    "expect": {
+      "result": "error",
+      "message": "Invalid credentials"
+    }
+  },
+  {
+    "name": "Login fails when username is empty",
+    "input": {
+      "username": "",
+      "password": "admin123"
+    },
+    "expect": {
+      "result": "validation",
+      "message": "Required",
+      "errorCount": 1
+    }
+  },
+  {
+    "name": "Login fails when password is empty",
+    "input": {
+      "username": "Admin",
+      "password": ""
+    },
+    "expect": {
+      "result": "validation",
+      "message": "Required",
+      "errorCount": 1
+    }
+  },
+  {
+    "name": "Login fails when both fields are empty",
+    "input": {
+      "username": "",
+      "password": ""
+    },
+    "expect": {
+      "result": "validation",
+      "message": "Required",
+      "errorCount": 2
+    }
+  },
+  {
+    "name": "Login fails with username containing spaces",
+    "input": {
+      "username": "   ",
+      "password": "admin123"
+    },
+    "expect": {
+      "result": "validation",
+      "message": "Required",
+      "errorCount": 1
+    }
+  },
+  {
+    "name": "Login fails with very long username",
+    "input": {
+      "username": "verylongusernametestcase123456789",
+      "password": "admin123"
+    },
+    "expect": {
+      "result": "error",
+      "message": "Invalid credentials"
+    }
+  }
+]
