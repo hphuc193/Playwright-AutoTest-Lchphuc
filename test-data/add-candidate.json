@@ -1,0 +1,52 @@
+{
+  "validCandidates": [
+    {
+      "description": "Them ung vien chi voi cac truong bat buoc",
+      "firstName": "Alice",
+      "middleName": "",
+      "lastName": "Wonderland",
+      "email": "alice@example.com",
+      "contactNumber": "",
+      "expectedMessage": "Successfully Saved"
+    },
+    {
+      "description": "Them ung vien voi day du thong tin",
+      "firstName": "Bob",
+      "middleName": "William",
+      "lastName": "Builder",
+      "email": "bob.builder@example.com",
+      "contactNumber": "0987654321",
+      "expectedMessage": "Successfully Saved"
+    }
+  ],
+  "invalidCandidates": [
+    {
+      "description": "Bo trong First Name",
+      "firstName": "",
+      "lastName": "Smith",
+      "email": "smith@example.com",
+      "expectedError": "Required"
+    },
+    {
+      "description": "Bo trong Last Name",
+      "firstName": "John",
+      "lastName": "",
+      "email": "john@example.com",
+      "expectedError": "Required"
+    },
+    {
+      "description": "Bo trong Email",
+      "firstName": "Emma",
+      "lastName": "Watson",
+      "email": "",
+      "expectedError": "Required"
+    },
+    {
+      "description": "Nhap sai dinh dang Email",
+      "firstName": "David",
+      "lastName": "Beckham",
+      "email": "david.beckham-invalid",
+      "expectedError": "Expected format: admin@example.com"
+    }
+  ]
+}
